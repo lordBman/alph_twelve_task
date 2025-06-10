@@ -18,13 +18,23 @@ class ItemRepository{
     const ItemRepository();
 
     Future<List<Item>> all() async{
-        final results = await __readJson();
-        return (results as List).map((init)=> Item.fromJson(init)).toList();
+        try{
+            final results = await __readJson();
+
+            return (results as List).map((init)=> Item.fromJson(init)).toList();
+        }catch(error){
+            return Future.error(Exception('Failed to load'));
+        }
     }
 
     Future<Item> get(String id) async{
         final items = await all();
-        return items.firstWhere((init)=> init.id == id,
-            orElse: () => throw Exception("item with $id not found"));
+        for (var item in items) {
+            if(item.id == id){
+                return item;
+            }
+        }
+        
+        return Future.error(Exception("item with $id not found"));
     }
 }
