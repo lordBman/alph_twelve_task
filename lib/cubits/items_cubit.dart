@@ -14,7 +14,7 @@ class ItemsCubit extends Cubit<ItemsState>{
     }
 
     void __load(){
-        emit(state.copy(status: StateStatus.loading, message: ""));
+        emit(state.copy(status: StateStatus.loading, message: null));
         repository.all().then((results){
             emit(state.copy(status: StateStatus.success, items: results));
         }).catchError((error){

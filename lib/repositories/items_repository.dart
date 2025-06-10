@@ -15,21 +15,15 @@ Future<dynamic> __readJson() async {
 }
 
 class ItemRepository{
-    final List<Item> items;
-
-    const ItemRepository({ this.items = const[] });
+    const ItemRepository();
 
     Future<List<Item>> all() async{
         final results = await __readJson();
-        items.addAll((results as List).map((init)=> Item.fromJson(init)));
-
-        return items;
+        return (results as List).map((init)=> Item.fromJson(init)).toList();
     }
 
     Future<Item> get(String id) async{
-        if(items.isEmpty){
-            await all();
-        }
+        final items = await all();
         return items.firstWhere((init)=> init.id == id,
             orElse: () => throw Exception("item with $id not found"));
     }

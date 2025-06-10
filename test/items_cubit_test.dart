@@ -32,7 +32,6 @@ void main() {
             },
             build: () => ItemsCubit(repository: mockRepository),
             expect: () => [
-                const ItemsState(status: StateStatus.loading, message: ''),
                 ItemsState(status: StateStatus.success, items: testItems),
             ],
             verify: (_) {
@@ -40,38 +39,34 @@ void main() {
             },
         );
 
-          blocTest<ItemsCubit, ItemsState>('emits [loading, failure] when loading items fails',
-              setUp: () {
-                  when(() => mockRepository.all()).thenThrow(Exception('Failed to load'));
-              },
-              build: () => ItemsCubit(repository: mockRepository),
-              expect: () => [
-                  const ItemsState(status: StateStatus.loading, message: ''),
-                  const ItemsState(status: StateStatus.failure, message: 'unable to fetch products'),
-              ],
-              verify: (_) {
-                  verify(() => mockRepository.all()).called(1);
-              }
-          );
+        blocTest<ItemsCubit, ItemsState>('emits [loading, failure] when loading items fails',
+            setUp: () {
+                when(() => mockRepository.all()).thenThrow(Exception('Failed to load'));
+            },
+            build: () => ItemsCubit(repository: mockRepository),
+            expect: () => [
+                const ItemsState(status: StateStatus.failure, message: 'unable to fetch products'),
+            ],
+            verify: (_) {
+                verify(() => mockRepository.all()).called(1);
+        });
           
-          blocTest<ItemsCubit, ItemsState>('emits [loading, success] when reloading items succeeds',
-              setUp: () {
-                  when(() => mockRepository.all())
-                      .thenAnswer((_) async => testItems);
-              },
-              build: () => ItemsCubit(repository: mockRepository),
-              act: (cubit) => cubit.reload(),
-              expect: () => [
-                  const ItemsState(status: StateStatus.loading, message: ''),
-                  ItemsState(status: StateStatus.success, items: testItems),
+        blocTest<ItemsCubit, ItemsState>('emits [loading, success] when reloading items succeeds',
+            setUp: () {
+                when(() => mockRepository.all()).thenAnswer((_) async => testItems);
+            },
+            build: () => ItemsCubit(repository: mockRepository),
+            act: (cubit) => cubit.reload(),
+            expect: () => [
+                const ItemsState(status: StateStatus.loading),
+                ItemsState(status: StateStatus.success, items: testItems),
 
-                  const ItemsState(status: StateStatus.loading, message: ''),
-                  ItemsState(status: StateStatus.success, items: [testItem]),
-              ],
-              verify: (_) {
-                  verify(() => mockRepository.all()).called(2);
-              },
-          );
+                const ItemsState(status: StateStatus.loading),
+                ItemsState(status: StateStatus.success, items: [testItem]),
+            ],
+            verify: (_) {
+                verify(() => mockRepository.all()).called(2);
+            });
 
         test('get() returns item from repository', () async {
             when(() => mockRepository.get('1')).thenAnswer((_) async => testItem);

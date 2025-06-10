@@ -3,6 +3,8 @@ import 'package:alpha_twelve_task/repositories/items_repository.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 void main(){
+    TestWidgetsFlutterBinding.ensureInitialized();
+
     group('ItemRepository', () {
         late ItemRepository repository;
 
@@ -37,7 +39,7 @@ void main(){
             test('returns a not found exception', () async {
                 String id = "unknown";
                 expect(() async => await repository.get("unknown"),
-                    throwsA(isA<Exception>().having((w) => w.toString(), 'message', 'item with $id not found')));
+                    throwsA(isA<Exception>().having((w) => w.toString(), 'message', Exception('item with $id not found').toString())));
             });
         });
     });
