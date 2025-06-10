@@ -1,161 +1,123 @@
-import 'package:bweather_repository/bweather_repository.dart';
-import 'package:bweatherflutter/states/forecast/city_state.dart';
-import 'package:bweatherflutter/states/forecast/weather_state.dart';
-import 'package:bweatherflutter/states/settings_cubit.dart';
-import 'package:bweatherflutter/states/weather_cubit.dart';
-import 'package:bweatherflutter/utils/status.dart';
-import 'package:mocktail/mocktail.dart';
+import 'package:alpha_twelve_task/cubits/shopping_cubit.dart';
+import 'package:alpha_twelve_task/cubits/states/shopping_state.dart';
+import 'package:alpha_twelve_task/models/cart_item.dart';
+import 'package:alpha_twelve_task/models/item.dart';
+import 'package:alpha_twelve_task/repositories/items_repository.dart';
 import 'package:bloc_test/bloc_test.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:mocktail/mocktail.dart';
 
-import 'helpers.dart';
+// Mock classes
+class MockItemRepository extends Mock implements ItemRepository {}
 
-const List<CityState> cities = [];
-const String message = "";
-const dynamic error = null;
+void main() {
+    late ShoppingCubit shoppingCubit;
 
-const StateStatus status = StateStatus.initial;
+    // Sample test data
+    final testItem = Item(id: '1',name: 'Test Item',imageUrl: 'test_url', details: ['test_detail'], price: 150);
 
-class MockForecastRepository extends Mock implements ForecastRepository {}
+    final testCartItem = CartItem(item: testItem, count: 1);
 
-class MockCity extends Mock implements City {}
-
-const citySample = City(name: "Chicago", elevation: 2.4, country: "America", latitude: 41.85003, longitude: -87.65005);
-
-void main(){
-  initHydratedStorage();
-
-  group('WeatherCubit', () {
-    late City city;
-    late ForecastRepository forecastRepository;
-    late WeatherCubit weatherCubit;
-
-    setUpAll(() async{
-      registerFallbackValue(MockCity());
+    setUp(() {  
+        shoppingCubit = ShoppingCubit();
     });
 
-    setUp((){
-      city = MockCity();
-      forecastRepository = MockForecastRepository();
+    tearDown(() { shoppingCubit.close(); });
 
-      when(() => city.name).thenReturn(citySample.name);
-      when(() => city.country).thenReturn(citySample.country);
-      when(() => city.latitude).thenReturn(citySample.latitude);
-      when(() => city.longitude).thenReturn(citySample.longitude);
-      when(() => city.elevation).thenReturn(citySample.elevation);
-      when(() => city.timezone).thenReturn("GMT");
+    group('ShoppingCubit', () {
+        blocTest<ShoppingCubit, ShoppingState>('emits state with new item when add() is called for new item',
+            build: () => shoppingCubit,
+            act: (cubit) => cubit.add(testItem),
+            expect: () => [
+               ShoppingState( cart: [testCartItem], unseen: 1),
+            ]);
 
-      when(() => forecastRepository.getWeather(any())).thenAnswer((_) async => city);
+        blocTest<ShoppingCubit, ShoppingState>('increments count when add() is called for existing item',
+            seed: () => ShoppingState(cart: [testCartItem]),
+            build: () => shoppingCubit,
+            act: (cubit) => cubit.add(testItem),
+            expect: () => [
+                ShoppingState(cart: [CartItem(item: testItem, count: 2)]),
+            ]);
 
-      weatherCubit = WeatherCubit(SettingsCubit(), repository: forecastRepository);
+        blocTest<ShoppingCubit, ShoppingState>('removes item when remove() is called',
+            seed: () => ShoppingState(cart: [testCartItem]),
+            build: () => shoppingCubit,
+            act: (cubit) => cubit.remove(testItem),
+            expect: () => [
+                const ShoppingState(cart: []),
+            ]);
+
+        blocTest<ShoppingCubit, ShoppingState>('reduces count when reduce() is called and count > 1',
+            seed: () => ShoppingState(cart: [CartItem(item: testItem, count: 2)]),
+            build: () => shoppingCubit,
+            act: (cubit) => cubit.reduce(testItem),
+            expect: () => [
+                ShoppingState(cart: [testCartItem]),
+            ]);
+
+        blocTest<ShoppingCubit, ShoppingState>('removes item when reduce() is called and count == 1',
+            seed: () => ShoppingState(cart: [testCartItem]),
+            build: () => shoppingCubit,
+            act: (cubit) => cubit.reduce(testItem),
+            expect: () => [
+                const ShoppingState(cart: []),
+            ]);
+            
+        blocTest<ShoppingCubit, ShoppingState>('toggles favourite when toggleFavourite() is called',
+            build: () => shoppingCubit,
+            act: (cubit) => cubit.toggleFavourite('1'),
+            expect: () => [
+                const ShoppingState(favourites: ['1']),
+            ],
+            verify: (_) {
+                expect(shoppingCubit.isFavourite('1'), true);
+            });
+                
+        blocTest<ShoppingCubit, ShoppingState>('removes favourite when toggleFavourite() is called for existing favourite',
+            seed: () => const ShoppingState(favourites: ['1']),
+            build: () => shoppingCubit,
+            act: (cubit) => cubit.toggleFavourite('1'),
+            expect: () => [
+                const ShoppingState(favourites: []),
+            ],
+            verify: (_) {
+                expect(shoppingCubit.isFavourite('1'), false);
+            });
+
+        blocTest<ShoppingCubit, ShoppingState>('clears unseen count when clearSeen() is called',
+            seed: () => ShoppingState(unseen: 3),
+            build: () => shoppingCubit,
+            act: (cubit) => cubit.clearSeen(),
+            expect: () => [
+                const ShoppingState(unseen: 0),
+            ]);
+            
+        group('Hydration', () {
+            final jsonState = {
+                'cart': [
+                    { 'item': { 'id': '1', 'imageUrl': 'test_url', 'name': 'Test Item', 'variant': '', 'details': ['test_detail'], 'price': 150 }, 'count': 1}
+                ],
+                'favourites': ['1'],
+                'unseen': 1
+            };
+
+            test('fromJson returns correct state', () {
+                final state = shoppingCubit.fromJson(jsonState);
+                
+                expect(state?.cart.length, 1);
+                expect(state?.favourites.length, 1);
+                expect(state?.unseen, 1);
+            });
+
+            test('toJson returns correct map', () {
+                final state = ShoppingState(cart: [testCartItem], favourites: ['1'], unseen: 1);
+
+                final json = shoppingCubit.toJson(state);
+                expect(json?['cart'].length, 1);
+                expect(json?['favourites'].length, 1);
+                expect(json?['unseen'], 1);
+            });
+        });
     });
-
-    test('initial state is correct', () {
-      final weatherCubit = WeatherCubit(SettingsCubit(), repository: forecastRepository);
-      expect(weatherCubit.state, const WeatherState());
-    });
-
-    group('toJson/fromJson', () {
-      test('work properly', () {
-        final weatherCubit = WeatherCubit(SettingsCubit(), repository: forecastRepository);
-        expect(
-          weatherCubit.fromJson(weatherCubit.toJson(weatherCubit.state)!),
-          weatherCubit.state,
-        );
-      });
-    });
-
-    group('fetchWeather', () {
-      blocTest<WeatherCubit, WeatherState>(
-        'emits nothing when city is null',
-        build: () => weatherCubit,
-        act: (cubit) => cubit.requestCity(null),
-        expect: () => <WeatherState>[],
-      );
-
-      blocTest<WeatherCubit, WeatherState>(
-        'emits nothing when city is empty',
-        build: () => weatherCubit,
-        act: (cubit) => cubit.requestCity(''),
-        expect: () => <WeatherState>[],
-      );
-
-      /*blocTest<WeatherCubit, WeatherState>(
-              'calls getWeather with correct city',
-              build: () => weatherCubit,
-              act: (cubit) => cubit.forecast(citySample),
-              verify: (_) {
-                  verify(() => forecastRepository.getWeather(citySample)).called(1);
-              },
-          );
-
-          blocTest<WeatherCubit, WeatherState>(
-              'emits [loading, failure] when getWeather throws',
-              setUp: () {
-                  when(
-                          () => weatherRepository.getWeather(any()),
-                  ).thenThrow(Exception('oops'));
-              },
-              build: () => weatherCubit,
-              act: (cubit) => cubit.fetchWeather(weatherLocation),
-              expect: () => <WeatherState>[
-                  WeatherState(status: WeatherStatus.loading),
-                  WeatherState(status: WeatherStatus.failure),
-              ],
-          );
-
-          blocTest<WeatherCubit, WeatherState>(
-              'emits [loading, success] when getWeather returns (celsius)',
-              build: () => weatherCubit,
-              act: (cubit) => cubit.fetchWeather(weatherLocation),
-              expect: () => <dynamic>[
-                  WeatherState(status: WeatherStatus.loading),
-                  isA<WeatherState>()
-                      .having((w) => w.status, 'status', WeatherStatus.success)
-                      .having(
-                          (w) => w.weather,
-                      'weather',
-                      isA<Weather>()
-                          .having((w) => w.lastUpdated, 'lastUpdated', isNotNull)
-                          .having((w) => w.condition, 'condition', weatherCondition)
-                          .having(
-                              (w) => w.temperature,
-                          'temperature',
-                          Temperature(value: weatherTemperature),
-                      )
-                          .having((w) => w.location, 'location', weatherLocation),
-                  ),
-              ],
-          );
-
-          blocTest<WeatherCubit, WeatherState>(
-              'emits [loading, success] when getWeather returns (fahrenheit)',
-              build: () => weatherCubit,
-              seed: () => WeatherState(temperatureUnits: TemperatureUnits.fahrenheit),
-              act: (cubit) => cubit.fetchWeather(weatherLocation),
-              expect: () => <dynamic>[
-                  WeatherState(
-                      status: WeatherStatus.loading,
-                      temperatureUnits: TemperatureUnits.fahrenheit,
-                  ),
-                  isA<WeatherState>()
-                      .having((w) => w.status, 'status', WeatherStatus.success)
-                      .having(
-                          (w) => w.weather,
-                      'weather',
-                      isA<Weather>()
-                          .having((w) => w.lastUpdated, 'lastUpdated', isNotNull)
-                          .having((w) => w.condition, 'condition', weatherCondition)
-                          .having(
-                              (w) => w.temperature,
-                          'temperature',
-                          Temperature(value: weatherTemperature.toFahrenheit()),
-                      )
-                          .having((w) => w.location, 'location', weatherLocation),
-                  ),
-              ],
-          );*/
-    });
-
-  });
 }

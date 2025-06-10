@@ -1,11 +1,13 @@
+import 'dart:developer';
+
 import 'package:alpha_twelve_task/cubits/states/shopping_state.dart';
 import 'package:alpha_twelve_task/models/cart_item.dart';
 import 'package:alpha_twelve_task/models/item.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:hydrated_bloc/hydrated_bloc.dart';
 
 import '../repositories/items_repository.dart';
 
-class ShoppingCubit extends Cubit<ShoppingState>{
+class ShoppingCubit extends HydratedCubit<ShoppingState>{
     final ItemRepository repository = ItemRepository();
 
     ShoppingCubit(): super(ShoppingState());
@@ -57,4 +59,24 @@ class ShoppingCubit extends Cubit<ShoppingState>{
     }
 
     void clearSeen() => emit(state.copy(unseen: 0));
+
+    @override
+    ShoppingState? fromJson(Map<String, dynamic> json) {
+        try{
+            return ShoppingState.fromJson(json);
+        }catch(err){
+            log("Shopping State deserialization error", error: err);
+        }
+        return null;
+    }
+    
+    @override
+    Map<String, dynamic>? toJson(ShoppingState state) {
+        try{
+            return state.toJson();
+        }catch(err){
+            log("Shopping State deserialization error", error: err);
+        }
+        return null;
+    }
 }

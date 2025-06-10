@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:alpha_twelve_task/models/cart_item.dart';
 import 'package:equatable/equatable.dart';
 
@@ -15,6 +17,19 @@ class ShoppingState extends Equatable{
             favourites: favourites ?? this.favourites
         );
     }
+
+    factory ShoppingState.fromJson(dynamic json){
+        return ShoppingState(
+            cart: (json["cart"] as List).map((init)=> CartItem.fromJson(init)).toList(), 
+            favourites: (json["favourites"] as List).map((init)=> init.toString()).toList(), 
+            unseen: json["unseen"]);
+    }
+
+    Map<String, dynamic> toJson() => {
+        "cart": cart.map((init)=>init.toJson()), "favourites": favourites, "unseen": unseen
+    };
+
+    String serialize() => json.encode(toJson());
 
     @override
     List<Object?> get props => [ cart, favourites, unseen ];

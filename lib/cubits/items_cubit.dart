@@ -2,7 +2,7 @@ import 'package:alpha_twelve_task/cubits/states/items_states.dart';
 import 'package:alpha_twelve_task/cubits/states/status.dart';
 import 'package:alpha_twelve_task/models/item.dart';
 import 'package:alpha_twelve_task/repositories/items_repository.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:hydrated_bloc/hydrated_bloc.dart';
 
 class ItemsCubit extends Cubit<ItemsState>{
     final ItemRepository repository;
