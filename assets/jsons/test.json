@@ -1,0 +1,106 @@
+[
+        {
+            "id": "aaassddddddd",
+            "name": "Apple iPhone 16 128GB",
+            "variant": "Teal",
+            "imageUrl": "iphone.png",
+            "details": [
+                "This pre-owned product is not Apple certified, but has been professionally inspected, tested and cleaned by Amazon-qualified suppliers.",
+                "There will be no visible cosmetic imperfections when held at an arm’s length. There will be no visible cosmetic imperfections when held at an arm’s length.",
+                "This product will have a battery which exceeds 80% capacity relative to new. Accessories will not be original, but will be compatible and fully functional.",
+                "Product may come in generic Box. This product is eligible for a replacement or refund within 90 days of receipt if you are not satisfied."
+            ],
+            "price": 700
+        },
+        {
+            "id": "aadgffbgbffvf",
+            "name": "M4 Macbook Air 13” 256GB",
+            "variant": "Sky blue",
+            "imageUrl": "mac.png",
+            "details": [
+                "This pre-owned product is not Apple certified, but has been professionally inspected, tested and cleaned by Amazon-qualified suppliers.",
+                "There will be no visible cosmetic imperfections when held at an arm’s length. There will be no visible cosmetic imperfections when held at an arm’s length.",
+                "This product will have a battery which exceeds 80% capacity relative to new. Accessories will not be original, but will be compatible and fully functional.",
+                "Product may come in generic Box. This product is eligible for a replacement or refund within 90 days of receipt if you are not satisfied."
+            ],
+            "price": 1000
+        },
+      {
+        "id": "dgrgththhhghg",
+        "name": "Google Pixel 9A 128GB",
+        "variant": "Iris",
+        "imageUrl": "google_pixels.png",
+        "details": [
+          "This pre-owned product is not Apple certified, but has been professionally inspected, tested and cleaned by Amazon-qualified suppliers.",
+          "There will be no visible cosmetic imperfections when held at an arm’s length. There will be no visible cosmetic imperfections when held at an arm’s length.",
+          "This product will have a battery which exceeds 80% capacity relative to new. Accessories will not be original, but will be compatible and fully functional.",
+          "Product may come in generic Box. This product is eligible for a replacement or refund within 90 days of receipt if you are not satisfied."
+        ],
+        "price": 499
+      },
+      {
+        "id": "fgrgthhghhbggb",
+        "name": "Apple Airpods 4 Active Noise Cancellation",
+        "variant": "Teal",
+        "imageUrl": "airpods.png",
+        "details": [
+          "This pre-owned product is not Apple certified, but has been professionally inspected, tested and cleaned by Amazon-qualified suppliers.",
+          "There will be no visible cosmetic imperfections when held at an arm’s length. There will be no visible cosmetic imperfections when held at an arm’s length.",
+          "This product will have a battery which exceeds 80% capacity relative to new. Accessories will not be original, but will be compatible and fully functional.",
+          "Product may come in generic Box. This product is eligible for a replacement or refund within 90 days of receipt if you are not satisfied."
+        ],
+        "price": 129
+      },
+      {
+        "id": "aaassrgthhh",
+        "name": "Apple iPhone 16 128GB",
+        "variant": "White",
+        "imageUrl": "iphone.png",
+        "details": [
+          "This pre-owned product is not Apple certified, but has been professionally inspected, tested and cleaned by Amazon-qualified suppliers.",
+          "There will be no visible cosmetic imperfections when held at an arm’s length. There will be no visible cosmetic imperfections when held at an arm’s length.",
+          "This product will have a battery which exceeds 80% capacity relative to new. Accessories will not be original, but will be compatible and fully functional.",
+          "Product may come in generic Box. This product is eligible for a replacement or refund within 90 days of receipt if you are not satisfied."
+        ],
+        "price": 700
+      },
+      {
+        "id": "aadsfdfgggf",
+        "name": "M4 Macbook Air 13” 256GB",
+        "variant": "Black",
+        "imageUrl": "mac.png",
+        "details": [
+          "This pre-owned product is not Apple certified, but has been professionally inspected, tested and cleaned by Amazon-qualified suppliers.",
+          "There will be no visible cosmetic imperfections when held at an arm’s length. There will be no visible cosmetic imperfections when held at an arm’s length.",
+          "This product will have a battery which exceeds 80% capacity relative to new. Accessories will not be original, but will be compatible and fully functional.",
+          "Product may come in generic Box. This product is eligible for a replacement or refund within 90 days of receipt if you are not satisfied."
+        ],
+        "price": 1000
+      },
+      {
+        "id": "dgrgththhhghgdf",
+        "name": "Google Pixel 9A 128GB",
+        "variant": "Pearl",
+        "imageUrl": "google_pixels.png",
+        "details": [
+          "This pre-owned product is not Apple certified, but has been professionally inspected, tested and cleaned by Amazon-qualified suppliers.",
+          "There will be no visible cosmetic imperfections when held at an arm’s length. There will be no visible cosmetic imperfections when held at an arm’s length.",
+          "This product will have a battery which exceeds 80% capacity relative to new. Accessories will not be original, but will be compatible and fully functional.",
+          "Product may come in generic Box. This product is eligible for a replacement or refund within 90 days of receipt if you are not satisfied."
+        ],
+        "price": 499
+      },
+      {
+        "id": "dfhjyhgfds",
+        "name": "Apple Airpods 4 Active Noise Cancellation",
+        "variant": "Blue",
+        "imageUrl": "airpods.png",
+        "details": [
+          "This pre-owned product is not Apple certified, but has been professionally inspected, tested and cleaned by Amazon-qualified suppliers.",
+          "There will be no visible cosmetic imperfections when held at an arm’s length. There will be no visible cosmetic imperfections when held at an arm’s length.",
+          "This product will have a battery which exceeds 80% capacity relative to new. Accessories will not be original, but will be compatible and fully functional.",
+          "Product may come in generic Box. This product is eligible for a replacement or refund within 90 days of receipt if you are not satisfied."
+        ],
+        "price": 129
+      }
+]
