@@ -16,6 +16,7 @@ class CartItemRemoveButton extends StatelessWidget{
             disabledColor: borderColor,
             padding: EdgeInsets.all(4),
             onPressed: clicked, shape: CircleBorder(side: BorderSide(color: borderColor, width: 1)),
-            minWidth: 36, height: 36 , child: SvgPicture.asset("assets/vectors/hugeicons_delete-02.svg", width: 20, height: 20));
+            minWidth: 36, height: 36 ,
+            child: SvgPicture.asset("assets/vectors/hugeicons_delete-02.svg", width: 20, height: 20, colorFilter: ColorFilter.mode(theme.onSurface, BlendMode.srcIn)));
     }
 }

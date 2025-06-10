@@ -26,7 +26,7 @@ class ShoppingState extends Equatable{
     }
 
     Map<String, dynamic> toJson() => {
-        "cart": cart.map((init)=>init.toJson()), "favourites": favourites, "unseen": unseen
+        "cart": cart.map((init)=>init.toJson()).toList(), "favourites": favourites, "unseen": unseen
     };
 
     String serialize() => json.encode(toJson());

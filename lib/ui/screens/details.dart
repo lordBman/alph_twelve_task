@@ -64,7 +64,7 @@ class __DetailsState extends State<Details>{
                                             Container(alignment: Alignment.topRight,
                                                 child: Padding(padding: const EdgeInsets.all(20.0),
                                                     child: InkWell(onTap: (){ context.read<ShoppingCubit>().toggleFavourite(snapshot.data!.id); },
-                                                        child: DecoratedBox(decoration: BoxDecoration(shape: BoxShape.circle, color: theme.surface),
+                                                        child: DecoratedBox(decoration: BoxDecoration(shape: BoxShape.circle, color: Colors.white),
                                                             child: Padding(padding: const EdgeInsets.all(10.0),
                                                                 child: IndexedStack(index: state.favourites.contains(snapshot.data!.id) ? 1 : 0, children: [
                                                                     SvgPicture.asset("assets/vectors/hugeicons_favourite.svg", width: 24, height: 24),
@@ -75,8 +75,11 @@ class __DetailsState extends State<Details>{
                                                 )
                                             )
                                         ]),
+                                        SizedBox(height: 10),
                                         Text(snapshot.data!.name, style: TextStyle(fontSize: 17)),
+                                        SizedBox(height: 10),
                                         Text("\$${snapshot.data!.price}.00", style: TextStyle(fontSize: 32, fontWeight: FontWeight.w700, color: theme.onSurface)),
+                                        SizedBox(height: 20),
                                         BulletList(title: "About this item", list: snapshot.data!.details)
                                     ])
                                 ),

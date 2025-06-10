@@ -7,22 +7,25 @@ import 'package:hydrated_bloc/hydrated_bloc.dart';
 class ItemsCubit extends Cubit<ItemsState>{
     final ItemRepository repository;
 
-    ItemsCubit({ this.repository = const ItemRepository() }): super(const ItemsState()){
-        if(state.status == StateStatus.initial){
-            __load();
+    ItemsCubit({ this.repository = const ItemRepository() }): super(const ItemsState());
+
+    Future<void> __load() async{
+        emit(state.copy(status: StateStatus.loading, message: null));
+        try{
+            final results = await repository.all();
+
+            emit(state.copy(status: StateStatus.success, items: results));
+        }catch(error){
+            emit(state.copy(status: StateStatus.failure, message: "unable to fetch products"));
         }
     }
 
-    void __load(){
-        emit(state.copy(status: StateStatus.loading, message: null));
-        repository.all().then((results){
-            emit(state.copy(status: StateStatus.success, items: results));
-        }).catchError((error){
-            emit(state.copy(status: StateStatus.failure, message: "unable to fetch products"));
-        });
+    Future<void> reload() async => await __load();
+    Future<void> init() async {
+        if(state.status == StateStatus.initial){
+            await __load();
+        }
     }
-
-    void reload() => __load();
 
     Future<Item> get(String id) async{
         return repository.get(id);

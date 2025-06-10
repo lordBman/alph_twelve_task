@@ -26,12 +26,20 @@ void main() {
     });
     
     group('ItemsCubit', () {
+        test('has [initial status] state is created', () async {
+            final cubit = ItemsCubit(repository: mockRepository);
+
+            expect(cubit.state.status, StateStatus.initial);
+        });
+
         blocTest<ItemsCubit, ItemsState>('emits [loading, success] when loading items succeeds',
             setUp: () {
                 when(() => mockRepository.all()).thenAnswer((_) async => testItems);
             },
             build: () => ItemsCubit(repository: mockRepository),
+            act: (cubit) => cubit.init(),
             expect: () => [
+                ItemsState(status: StateStatus.loading, items: []),
                 ItemsState(status: StateStatus.success, items: testItems),
             ],
             verify: (_) {
@@ -44,7 +52,9 @@ void main() {
                 when(() => mockRepository.all()).thenThrow(Exception('Failed to load'));
             },
             build: () => ItemsCubit(repository: mockRepository),
+            act: (cubit) => cubit.init(),
             expect: () => [
+                ItemsState(status: StateStatus.loading, items: []),
                 const ItemsState(status: StateStatus.failure, message: 'unable to fetch products'),
             ],
             verify: (_) {
@@ -58,17 +68,15 @@ void main() {
             build: () => ItemsCubit(repository: mockRepository),
             act: (cubit) => cubit.reload(),
             expect: () => [
-                const ItemsState(status: StateStatus.loading),
+                ItemsState(status: StateStatus.loading),
                 ItemsState(status: StateStatus.success, items: testItems),
-
-                const ItemsState(status: StateStatus.loading),
-                ItemsState(status: StateStatus.success, items: [testItem]),
             ],
             verify: (_) {
-                verify(() => mockRepository.all()).called(2);
+                verify(() => mockRepository.all()).called(1);
             });
 
         test('get() returns item from repository', () async {
+            when(() => mockRepository.all()).thenAnswer((_) async => testItems);
             when(() => mockRepository.get('1')).thenAnswer((_) async => testItem);
             final cubit = ItemsCubit(repository: mockRepository);
 
@@ -78,6 +86,7 @@ void main() {
         });
 
         test('get() throws when repository throws', () async {
+            when(() => mockRepository.all()).thenAnswer((_) async => testItems);
             when(() => mockRepository.get('1')).thenThrow(Exception('Not found'));
             final cubit = ItemsCubit(repository: mockRepository);
 

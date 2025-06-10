@@ -2,7 +2,8 @@ import 'dart:developer';
 
 import 'package:alpha_twelve_task/ui/app.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:hydrated_bloc/hydrated_bloc.dart';
+import 'package:path_provider/path_provider.dart';
 
 class SimpleBlocObserver extends BlocObserver {
     const SimpleBlocObserver();
@@ -44,8 +45,9 @@ class SimpleBlocObserver extends BlocObserver {
     }
 }
 
-void main() {
+void main() async {
     WidgetsFlutterBinding.ensureInitialized();
+    HydratedBloc.storage = await HydratedStorage.build(storageDirectory: HydratedStorageDirectory((await getTemporaryDirectory()).path));
     Bloc.observer = const SimpleBlocObserver();
     
     runApp(const App());

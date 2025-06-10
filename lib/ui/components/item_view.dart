@@ -13,7 +13,7 @@ class ItemView extends StatelessWidget{
     Widget build(BuildContext context) {
         ColorScheme theme = Theme.of(context).colorScheme;
 
-        return GestureDetector(onTap: onClicked, child: Column(crossAxisAlignment: CrossAxisAlignment.start, mainAxisSize: MainAxisSize.min, children: [
+        return GestureDetector(onTap: onClicked, child: Column(spacing: 4, crossAxisAlignment: CrossAxisAlignment.start, mainAxisSize: MainAxisSize.min, children: [
             Image.asset("assets/images/${item.imageUrl}", fit: BoxFit.fitWidth),
             SizedBox(width: 160, child: Text("${item.name}|${item.variant}", style: TextStyle(fontSize: 14, fontWeight: FontWeight.w400, color: theme.onSurface))),
             Text("\$${item.price}.00", style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: theme.onSurface))

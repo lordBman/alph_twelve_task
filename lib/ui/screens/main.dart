@@ -87,7 +87,7 @@ class __MainState extends State<Main>{
                           Text("Umuezike Road, Oyo State", style: TextStyle(fontSize: 12, fontWeight: FontWeight.w600))
                       ]),
                       actions: [
-                          IconButton(onPressed: (){}, icon: SvgPicture.asset("assets/vectors/hugeicons_notification-02.svg"))
+                          IconButton(onPressed: (){}, icon: SvgPicture.asset("assets/vectors/hugeicons_notification-02.svg", colorFilter: ColorFilter.mode(theme.onSurface, BlendMode.srcIn)))
                       ],
                       collapsedHeight: currentIndex == 0 ? 120 : null,
                       flexibleSpace: currentIndex == 0 ? Padding(padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),

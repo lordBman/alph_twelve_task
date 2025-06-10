@@ -5,26 +5,27 @@ import 'package:alpha_twelve_task/models/item.dart';
 import 'package:alpha_twelve_task/repositories/items_repository.dart';
 import 'package:bloc_test/bloc_test.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:hydrated_bloc/hydrated_bloc.dart';
 import 'package:mocktail/mocktail.dart';
+
+import 'utils/helpers.dart';
 
 // Mock classes
 class MockItemRepository extends Mock implements ItemRepository {}
 
+// Sample test data
+final testItem = Item(id: '1',name: 'Test Item',imageUrl: 'test_url', details: ['test_detail'], price: 150);
+final testCartItem = CartItem(item: testItem, count: 1);
+
 void main() {
-    late ShoppingCubit shoppingCubit;
-
-    // Sample test data
-    final testItem = Item(id: '1',name: 'Test Item',imageUrl: 'test_url', details: ['test_detail'], price: 150);
-
-    final testCartItem = CartItem(item: testItem, count: 1);
-
-    setUp(() {  
-        shoppingCubit = ShoppingCubit();
-    });
-
-    tearDown(() { shoppingCubit.close(); });
+    initHydratedStorage();
 
     group('ShoppingCubit', () {
+        late ShoppingCubit shoppingCubit;
+
+        setUp(()=> shoppingCubit = ShoppingCubit());
+        tearDown(()=> shoppingCubit.close());
+
         blocTest<ShoppingCubit, ShoppingState>('emits state with new item when add() is called for new item',
             build: () => shoppingCubit,
             act: (cubit) => cubit.add(testItem),
