@@ -43,7 +43,7 @@ class __DetailsState extends State<Details>{
                 ]), 
                 actions: [
                     IconButton(onPressed: (){},
-                        icon: SvgPicture.asset("assets/vectors/hugeicons_notification-02.svg"))
+                        icon: SvgPicture.asset("assets/vectors/hugeicons_notification-02.svg", colorFilter: ColorFilter.mode(theme.onSurface, BlendMode.srcIn)))
                 ],
             ),
             body: Column(children: [
