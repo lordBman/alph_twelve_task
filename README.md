@@ -11,6 +11,7 @@ A Flutter e-commerce app with product browsing, detailed views, and cart functio
 - ✅ Add products to cart
 - ✨ Light/Dark theme support
 - ✨ Shimmer loading effects
+- ✨ Persistant Global Statemanagment( App data is retained even after app is closed)
 
 ## Screenshots
 
